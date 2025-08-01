@@ -20,18 +20,21 @@ public class EventService {
     @Autowired
     private UserService userService;
 
-    public Event createEvent(EventDTO dto, String creatorUsername) {
-        User creator = userService.findByUsername(creatorUsername);
+    public Event createEvent(EventDTO dto, Long creatorId) {
+        User creator = userService.findById(creatorId);
 
         if (!creator.getRole().name().equals("ORGANIZER")) {
             throw new BadRequestException("Only organizers can create events");
         }
 
-        Event event = new Event(dto.title(), dto.description(), dto.date(), dto.location(), dto.totalSeats(),
-                dto.totalSeats(), creator);
+        Event event = new Event(
+                dto.title(), dto.description(), dto.date(), dto.location(), dto.totalSeats(),
+                dto.totalSeats(), creator
+        );
 
         return eventRepository.save(event);
     }
+
 
     public List<Event> getAllEvents() {
         return eventRepository.findAll();

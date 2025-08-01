@@ -3,7 +3,7 @@ package valeriapagliarini.u5d15.payloads;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 public record EventDTO(
 
@@ -13,7 +13,7 @@ public record EventDTO(
         String description,
 
         @NotNull(message = "Date is required")
-        LocalDateTime date,
+        LocalDate date,
 
         @NotBlank(message = "Location is required")
         String location,
