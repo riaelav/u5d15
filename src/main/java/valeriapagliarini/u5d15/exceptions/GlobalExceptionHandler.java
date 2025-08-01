@@ -55,5 +55,11 @@ public class GlobalExceptionHandler {
         );
     }
 
+    @ExceptionHandler(UnauthorizedException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ErrorResponseDTO handleUnauthorized(UnauthorizedException ex) {
+        return new ErrorResponseDTO(ex.getMessage(), LocalDateTime.now());
+    }
+
 
 }
