@@ -35,6 +35,7 @@ public class User {
     public User(String username, String email, String password, Role role) {
         this.username = username;
         this.email = email;
+        this.password = password;
         this.role = role;
     }
 
@@ -45,7 +46,6 @@ public class User {
                 "id=" + id +
                 ", username='" + username + '\'' +
                 ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
                 ", role=" + role +
                 '}';
     }
