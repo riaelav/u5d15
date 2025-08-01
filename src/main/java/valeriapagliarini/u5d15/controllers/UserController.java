@@ -1,14 +1,12 @@
 package valeriapagliarini.u5d15.controllers;
 
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 import valeriapagliarini.u5d15.entities.User;
+import valeriapagliarini.u5d15.exceptions.ValidationException;
 import valeriapagliarini.u5d15.payloads.UserRegistrationDTO;
 import valeriapagliarini.u5d15.payloads.UserResponseDTO;
 import valeriapagliarini.u5d15.services.UserService;
@@ -20,11 +18,21 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @PostMapping("/register")
-    public ResponseEntity<UserResponseDTO> registerUser(@RequestBody @Valid UserRegistrationDTO payload) {
-        User user = userService.register(payload);
-        return ResponseEntity.status(HttpStatus.CREATED).body(new UserResponseDTO(user.getId(),
-                user.getUsername(), user.getEmail(), user.getRole()));
 
+    @PostMapping("/register")
+    @ResponseStatus(HttpStatus.CREATED)
+    public UserResponseDTO registerUser(@RequestBody @Validated UserRegistrationDTO payload, BindingResult validationResult) {
+        if (validationResult.hasErrors()) {
+            throw new ValidationException(
+                    validationResult.getFieldErrors()
+                            .stream()
+                            .map(fieldError -> fieldError.getDefaultMessage())
+                            .toList()
+            );
+        } else {
+            User user = userService.register(payload);
+            return new UserResponseDTO(user.getId());
+        }
     }
+
 }
