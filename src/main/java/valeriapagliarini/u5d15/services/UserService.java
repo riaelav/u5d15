@@ -5,6 +5,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import valeriapagliarini.u5d15.entities.User;
 import valeriapagliarini.u5d15.exceptions.BadRequestException;
+import valeriapagliarini.u5d15.exceptions.NotFoundException;
 import valeriapagliarini.u5d15.payloads.UserRegistrationDTO;
 import valeriapagliarini.u5d15.repositories.UserRepository;
 
@@ -44,4 +45,10 @@ public class UserService {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new BadRequestException("User not found"));
     }
+
+    public User findById(Long userId) {
+        return this.userRepository.findById(userId).orElseThrow(() -> new NotFoundException(userId));
+    }
+
+
 }
